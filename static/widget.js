@@ -2,9 +2,9 @@
   'use strict';
 
   const CONFIG = {
-    apiUrl: 'https://marles-hise-ai.up.railway.app/chat',
-    inquiryUrl: 'https://marles-hise-ai.up.railway.app/chat/inquiry',
-    logoUrl: 'https://marles-hise-ai.up.railway.app/static/logo.png',
+    apiUrl: 'https://marles-hise.up.railway.app/chat',
+    inquiryUrl: 'https://marles-hise.up.railway.app/chat/inquiry',
+    logoUrl: 'https://marles-hise.up.railway.app/static/logo.png',
     brandColor: '#F7941D',
     brandColorHover: '#d97d0e',
     accentColor: '#F7941D',
