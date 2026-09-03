@@ -127,7 +127,7 @@ async def submit_inquiry(payload: InquiryRequest):
         Email: info@marles.com<br>
         Povprasevanje: marles.com/povprasevanje
       </div>
-      <p style="color:#999;font-size:12px;">Marles Hise Maribor d.o.o. · Limbvska cesta 2, 2341 Limbus</p>
+      <p style="color:#999;font-size:12px;">Marles Hiše Maribor d.o.o. · Limbuška cesta 2, 2341 Limbuš</p>
     </div>
     </body></html>"""
     _send_email(payload.email, "Potrditev povprasevanja — Marles Hise", confirm_html)

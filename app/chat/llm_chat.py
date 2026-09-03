@@ -40,7 +40,7 @@ def chat(message: str, history: list[dict] | None = None, client: OpenAI | None 
             messages.append(msg)
     messages.append({"role": "user", "content": message})
 
-    response = client.chat.completions.create(model=model, messages=messages, max_tokens=450)
+    response = client.chat.completions.create(model=model, messages=messages, max_tokens=700)
     reply = (response.choices[0].message.content or "").strip()
     if not reply:
         reply = "Oprostite, nisem razumel vprašanja. Pokličite nas: 02 429 45 00"
