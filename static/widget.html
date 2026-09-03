@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marles Hise — AI pomocnik</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; height: 100%; font-family: system-ui, sans-serif; }
+    body {
+      min-height: 100vh;
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,0.40) 0%, rgba(0,0,0,0.20) 100%),
+        url('/static/bg.jpg') center center / cover no-repeat;
+      background-attachment: fixed;
+      padding: 60px 48px;
+    }
+    .page-content { max-width: 580px; }
+    .logo-header { display: flex; align-items: center; gap: 16px; margin-bottom: 28px; }
+    .logo-header img { width: 60px; height: 60px; border-radius: 10px; background: white; padding: 4px; object-fit: contain; }
+    h1 { color: #fff; font-size: 30px; font-weight: 700; margin: 0 0 4px; text-shadow: 0 2px 8px rgba(0,0,0,0.4); }
+    .tagline { color: #F7941D; font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin: 0; }
+    .desc { color: rgba(255,255,255,0.95); font-size: 17px; margin: 0 0 16px; line-height: 1.55; text-shadow: 0 1px 4px rgba(0,0,0,0.5); }
+    .badge { display: inline-block; background: rgba(247,148,29,0.85); color: #fff; font-size: 13px; font-weight: 600; padding: 5px 14px; border-radius: 20px; backdrop-filter: blur(4px); }
+  </style>
+</head>
+<body>
+  <div class="page-content">
+    <div class="logo-header">
+      <img src="/static/logo.png" alt="Marles" onerror="this.style.display='none'">
+      <div>
+        <h1>Marles Hise</h1>
+        <p class="tagline">Vas dom, vasa zgodba</p>
+      </div>
+    </div>
+    <p class="desc">Montazne lesene hise z 125 leti tradicije. Od Fresh do Forever Mine — zgradimo dom, ki traja 30 let in vec.</p>
+    <span class="badge">125 let tradicije · German Design Award 2025 · Made in Slovenia</span>
+  </div>
+  <script src="/static/widget.js?v=1"></script>
+</body>
+</html>
