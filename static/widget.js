@@ -8,10 +8,10 @@
     brandColor: '#F7941D',
     brandColorHover: '#d97d0e',
     accentColor: '#F7941D',
-    title: 'Marles Hise',
-    subtitle: 'Pomocnik za montazne hise',
-    placeholder: 'Vprasajte o hisah, tehnologiji, postopku...',
-    welcomeMessage: 'Pozdravljeni! Sem AI pomocnik Marles Hise Maribor — slovenskega vodilnega proizvajalca montaznih lesenih his z 125 leti tradicije. Pomagam pri izbiri modela, odgovarjam o tehnologiji, postopku gradnje in postopku povprasevanja. Kako vam lahko pomagam?',
+    title: 'Marles Hiše',
+    subtitle: 'Pomočnik za montažne hiše',
+    placeholder: 'Vprašajte o hišah, tehnologiji, postopku...',
+    welcomeMessage: 'Pozdravljeni! Sem AI pomočnik Marles Hiše Maribor. Pomagam pri izbiri modela, tehnologiji, postopku gradnje in povpraševanju. Kako vam lahko pomagam?',
     mobileBreakpoint: 768,
     autoOpenDelay: 3000,
     maxStoredMessages: 50
@@ -332,13 +332,13 @@
       </div>
       <div id="mo-inquiry-form-view">
         <div id="mo-inquiry-form-header">
-          <span>Povprasevanje za ponudbo</span>
+          <span>Povpraševanje za ponudbo</span>
           <button id="mo-inquiry-back">&larr; Nazaj</button>
         </div>
         <div id="mo-inquiry-form-scroll">
           <div class="kv-field">
             <label>Ime in priimek <span>*</span></label>
-            <input type="text" id="jf-ime" placeholder="Vase ime">
+            <input type="text" id="jf-ime" placeholder="Vaše ime">
           </div>
           <div class="kv-field">
             <label>Telefon <span>*</span></label>
@@ -349,7 +349,7 @@
             <input type="email" id="jf-email" placeholder="vas@email.com">
           </div>
           <div class="kv-field">
-            <label>Vrsta povprasevanja</label>
+            <label>Vrsta povpraševanja</label>
             <div class="kv-checkboxes">
               <label class="kv-checkbox-item"><input type="checkbox" value="Fresh linija"> Fresh</label>
               <label class="kv-checkbox-item"><input type="checkbox" value="Pure linija"> Pure</label>
@@ -361,7 +361,7 @@
           </div>
           <div class="kv-field">
             <label>Sporocilo</label>
-            <textarea id="jf-sporocilo" placeholder="Zelena velikost, lokacija, rok, posebne zahteve..."></textarea>
+            <textarea id="jf-sporocilo" placeholder="Željene velikost, lokacija, rok, posebne zahteve..."></textarea>
           </div>
           <button id="mo-inquiry-submit">POSLJI POVPRASEVANJE</button>
         </div>
@@ -555,7 +555,7 @@
       addMessage(data.reply || 'Oprostite, prislo je do napake.', 'bot');
     } catch (err) {
       hideTyping();
-      addMessage('Oprostite, trenutno ni mozno vzpostaviti povezave. Pokliicite: 02 429 45 00.', 'bot');
+      addMessage('Oprostite, trenutno ni možno vzpostaviti povezave. Pokličite: 02 429 45 00.', 'bot');
     }
     sendBtn.disabled = false;
     input.focus();
@@ -589,7 +589,7 @@
       document.getElementById('mo-inquiry-form-scroll').style.display = 'none';
       document.getElementById('mo-inquiry-success').classList.add('kv-visible');
     } catch (e) {
-      alert('Napaka pri posiljanju. Pokliicite: 02 429 45 00');
+      alert('Napaka pri pošiljanju. Pokličite: 02 429 45 00');
       btn.disabled = false; btn.textContent = 'POSLJI POVPRASEVANJE';
     }
   }
