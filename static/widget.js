@@ -124,9 +124,9 @@
 
     @media (max-width: ${CONFIG.mobileBreakpoint}px) {
       #kv-widget-panel {
-        position: fixed !important; top: 0 !important; left: 0 !important;
-        right: 0 !important; bottom: 0 !important; width: 100% !important;
-        height: auto !important; max-height: none !important;
+        position: fixed !important; top: 8px !important; left: 0 !important;
+        right: 0 !important; bottom: auto !important; width: 100% !important;
+        height: calc(100dvh - 8px - env(safe-area-inset-bottom)) !important; max-height: none !important;
         border-radius: 0 !important; margin: 0 !important;
       }
       #kv-widget-panel.kv-open { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; }
@@ -240,10 +240,17 @@
   let sessionId = localStorage.getItem('mh_widget_session') || generateSessionId();
   localStorage.setItem('mh_widget_session', sessionId);
 
+  const MSG_TTL_MS = 24 * 60 * 60 * 1000;
   let storedMessages = [];
   try {
     const stored = localStorage.getItem('mh_widget_messages');
-    if (stored) storedMessages = JSON.parse(stored);
+    const storedTs = parseInt(localStorage.getItem('mh_widget_messages_ts') || '0', 10);
+    if (stored && storedTs && (Date.now() - storedTs < MSG_TTL_MS)) {
+      storedMessages = JSON.parse(stored);
+    } else {
+      localStorage.removeItem('mh_widget_messages');
+      localStorage.removeItem('mh_widget_messages_ts');
+    }
   } catch (e) { storedMessages = []; }
 
   function generateSessionId() {
@@ -252,11 +259,13 @@
 
   function saveMessages() {
     localStorage.setItem('mh_widget_messages', JSON.stringify(storedMessages.slice(-CONFIG.maxStoredMessages)));
+    localStorage.setItem('mh_widget_messages_ts', String(Date.now()));
   }
 
   function clearConversation() {
     storedMessages = [];
     localStorage.removeItem('mh_widget_messages');
+    localStorage.removeItem('mh_widget_messages_ts');
     sessionId = generateSessionId();
     localStorage.setItem('mh_widget_session', sessionId);
     document.getElementById('kv-widget-messages').innerHTML = '';
@@ -295,6 +304,7 @@
 
     const bubble = document.createElement('button');
     bubble.id = 'kv-widget-bubble';
+    bubble.setAttribute('aria-label', 'Odpri pogovor z Marles pomočnikom');
     bubble.innerHTML = CONFIG.logoUrl
       ? `<img src="${CONFIG.logoUrl}" alt="Marles" style="width:44px;height:44px;object-fit:contain;border-radius:8px;background:white;padding:3px;">`
       : icons.chat;
@@ -309,9 +319,9 @@
           <h3>${CONFIG.title}</h3>
           <p>${CONFIG.subtitle}</p>
         </div>
-        <button class="kv-header-btn" id="kv-widget-refresh" title="Nov pogovor">${icons.refresh}</button>
-        <button class="kv-header-btn" id="kv-widget-minimize" title="Minimiziraj">${icons.minimize}</button>
-        <button class="kv-header-btn" id="kv-widget-close" title="Zapri">${icons.close}</button>
+        <button class="kv-header-btn" id="kv-widget-refresh" title="Nov pogovor" aria-label="Nov pogovor">${icons.refresh}</button>
+        <button class="kv-header-btn" id="kv-widget-minimize" title="Minimiziraj" aria-label="Minimiziraj">${icons.minimize}</button>
+        <button class="kv-header-btn" id="kv-widget-close" title="Zapri" aria-label="Zapri">${icons.close}</button>
       </div>
       <div id="kv-chat-view" style="display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0;">
         <div id="kv-widget-messages">
@@ -320,14 +330,14 @@
         <div id="mo-inquiry-btn-bar">
           <button id="mo-inquiry-btn">
             <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:white;flex-shrink:0;"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-            POSLJI POVPRASEVANJE
+            POŠLJI POVPRAŠEVANJE
           </button>
         </div>
         <div id="kv-widget-input-area">
-          <input type="text" id="kv-widget-input" placeholder="${CONFIG.placeholder}">
+          <input type="text" id="kv-widget-input" placeholder="${CONFIG.placeholder}" aria-label="Vaše vprašanje">
           <button id="kv-widget-send">${icons.send}</button>
         </div>
-        <div id="kv-widget-disclaimer">&#x1F916; Ta asistent je umetna inteligenca (AI) &mdash; EU AI Act cl. 50. Za ponudbo poklic&#774;ite <a href="tel:+38602429450002">02 429 45 00</a>.</div>
+        <div id="kv-widget-disclaimer">&#x1F916; AI pomočnik (EU AI Act čl. 50). Pogovor shranjen lokalno (24 h). <a href="#" id="kv-clear-link" style="color:${CONFIG.brandColor}">Počisti</a> | MB: <a href="tel:+38624294500" style="color:${CONFIG.brandColor}">02 429 45 00</a> · LJ: <a href="tel:+38682052851" style="color:${CONFIG.brandColor}">08 205 28 51</a></div>
         <div id="kv-widget-powered">built by: <a href="https://spoznaj-ai.si" target="_blank">spoznaj-ai.si</a></div>
       </div>
       <div id="mo-inquiry-form-view">
@@ -345,7 +355,7 @@
             <input type="tel" id="jf-telefon" placeholder="+386 ...">
           </div>
           <div class="kv-field">
-            <label>E-posta <span>*</span></label>
+            <label>E-pošta <span>*</span></label>
             <input type="email" id="jf-email" placeholder="vas@email.com">
           </div>
           <div class="kv-field">
@@ -360,17 +370,17 @@
             </div>
           </div>
           <div class="kv-field">
-            <label>Sporocilo</label>
+            <label>Sporočilo</label>
             <textarea id="jf-sporocilo" placeholder="Željene velikost, lokacija, rok, posebne zahteve..."></textarea>
           </div>
-          <button id="mo-inquiry-submit">POSLJI POVPRASEVANJE</button>
+          <button id="mo-inquiry-submit">POŠLJI POVPRAŠEVANJE</button>
         </div>
         <div id="mo-inquiry-success">
           <div class="kv-success-icon">
             <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
           </div>
-          <h4>Povprasevanje poslano!</h4>
-          <p>Nasa ekipa vas bo kontaktirala v najkrajsem moznem casu.<br><br>
+          <h4>Povpraševanje poslano!</h4>
+          <p>Naša ekipa vas bo kontaktirala v najkrajšem možnem času.<br><br>
           Maribor: 02 429 45 00<br>Ljubljana: 08 205 28 51</p>
         </div>
       </div>
@@ -393,6 +403,9 @@
     document.getElementById('mo-inquiry-btn').onclick = openInquiryForm;
     document.getElementById('mo-inquiry-back').onclick = closeInquiryForm;
     document.getElementById('mo-inquiry-submit').onclick = submitInquiryForm;
+    var clearLink = document.getElementById('kv-clear-link');
+    if (clearLink) clearLink.onclick = function(e) { e.preventDefault(); clearConversation(); };
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && panelOpen) closePanel(); });
 
     document.getElementById('kv-widget-input').addEventListener('focus', function() {
       setTimeout(function() { var m = document.getElementById('kv-widget-messages'); if (m) m.scrollTop = m.scrollHeight; }, 350);
@@ -444,7 +457,7 @@
     var panel = document.getElementById('kv-widget-panel');
     panel.classList.add('kv-open');
     if (window.innerWidth <= CONFIG.mobileBreakpoint) {
-      panel.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;width:100%;height:auto;max-height:none;border-radius:0;';
+      panel.style.cssText = 'position:fixed;top:8px;left:0;right:0;bottom:auto;width:100%;height:calc(100dvh - 8px - env(safe-area-inset-bottom));max-height:none;border-radius:0;';
       document.body.style.overflow = 'hidden';
       document.getElementById('kv-launcher').style.display = 'none';
     }
@@ -582,7 +595,7 @@
     document.querySelectorAll('.kv-checkboxes input[type=checkbox]:checked').forEach(function(cb) { tipi.push(cb.value); });
     var payload = { ime: ime, telefon: telefon, email: email, tip: tipi.join(', ') || null, sporocilo: document.getElementById('jf-sporocilo').value.trim() || null };
     var btn = document.getElementById('mo-inquiry-submit');
-    btn.disabled = true; btn.textContent = 'Posiljam...';
+    btn.disabled = true; btn.textContent = 'Pošiljam...';
     try {
       var res = await fetch(CONFIG.inquiryUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
       if (!res.ok) throw new Error('server error');
@@ -590,7 +603,7 @@
       document.getElementById('mo-inquiry-success').classList.add('kv-visible');
     } catch (e) {
       alert('Napaka pri pošiljanju. Pokličite: 02 429 45 00');
-      btn.disabled = false; btn.textContent = 'POSLJI POVPRASEVANJE';
+      btn.disabled = false; btn.textContent = 'POŠLJI POVPRAŠEVANJE';
     }
   }
 
