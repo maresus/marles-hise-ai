@@ -135,6 +135,9 @@
       #kv-widget-input-area { padding-bottom: max(16px, env(safe-area-inset-bottom)) !important; padding-left: max(12px, env(safe-area-inset-left)) !important; padding-right: max(12px, env(safe-area-inset-right)) !important; flex-shrink: 0 !important; }
       #kv-widget-input { font-size: 16px !important; }
       #kv-widget-minimize { display: none !important; }
+      .kv-header-btn { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
+      #kv-widget-disclaimer a, #kv-widget-powered a { display: inline-block; padding: 12px 6px; margin: -12px 0; }
+      #mo-inquiry-btn { min-height: 48px; }
     }
 
     #kv-widget-header {
@@ -468,6 +471,8 @@
       if (window.visualViewport) onViewportResize();
     }
     hideCards();
+    var bubbleEl = document.getElementById('kv-widget-bubble');
+    if (bubbleEl) bubbleEl.setAttribute('aria-expanded', 'true');
     document.getElementById('kv-widget-input').focus();
     localStorage.setItem('mh_widget_open', 'true');
     var messages = document.getElementById('kv-widget-messages');
@@ -482,6 +487,8 @@
     panel.style.cssText = '';
     document.body.style.overflow = '';
     document.getElementById('kv-launcher').style.display = 'flex';
+    var bubbleEl = document.getElementById('kv-widget-bubble');
+    if (bubbleEl) bubbleEl.setAttribute('aria-expanded', 'false');
     var btn = document.getElementById('kv-widget-minimize');
     if (btn) { btn.innerHTML = icons.minimize; btn.title = 'Minimiziraj'; }
     localStorage.setItem('mh_widget_open', 'false');
@@ -544,6 +551,9 @@
     escaped = escaped.replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener" style="color:#F7941D;text-decoration:underline;">$1</a>');
     escaped = escaped.replace(/(?<!=["'])(https?:\/\/[^\s<>"')\]]+)/g, '<a href="$1" target="_blank" rel="noopener" style="color:#F7941D;text-decoration:underline;">$1</a>');
     escaped = escaped.replace(/(?<![/"'=])(www\.[a-zA-Z0-9][^\s<>"')\]]+)/g, '<a href="https://$1" target="_blank" rel="noopener" style="color:#F7941D;text-decoration:underline;">$1</a>');
+    escaped = escaped.replace(/([a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,})/g, '<a href="mailto:$1" style="color:#F7941D;text-decoration:underline;">$1</a>');
+    escaped = escaped.replace(/\b(\+386[\s]?\d{2}[\s]?\d{3}[\s]?\d{3})\b/g, function(m) { return '<a href="tel:' + m.replace(/\s/g, '') + '" style="color:#F7941D;text-decoration:underline;">' + m + '</a>'; });
+    escaped = escaped.replace(/\b(0\d{2})[\s]?(\d{3})[\s]?(\d{3})\b/g, function(m, a, b, c) { return '<a href="tel:+386' + a.substring(1) + b + c + '" style="color:#F7941D;text-decoration:underline;">' + m + '</a>'; });
     escaped = escaped.replace(/((?:^|\n)- [^\n]+)+/g, function(block) {
       var items = block.trim().split(/\n/).map(function(line) { return '<li>' + line.replace(/^- /, '') + '</li>'; }).join('');
       return '<ul style="margin:6px 0 6px 16px;padding:0;">' + items + '</ul>';
